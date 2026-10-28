@@ -1,0 +1,32 @@
+There are 2 types of access
+	1. Console
+	2. Remote
+
+The console is a direct access to an operating system when it is connected through VGA, HDMI, DVI etc.
+
+Remote access where we connect to os remotely over the network.
+	- Windows to windows - RDP using Ip address
+	
+	- Macos to macos - sharing
+	
+	- Windows to linux - putty client using ip address
+	For windows 10 or newer no need putty, SSH is built in
+	Ø ssh ipaddress_of_linux
+
+	- Linux to linux 
+	Ø ssh ipaddress_of_linux
+	
+	Ø Ssh -l username ipaddress
+
+----------------------------------------------------------------------------------
+
+	Ø Changing Password
+	- One should change intial password as soon as login
+		○  command $ passwd userid
+		- Old password : enter current password
+		- New password : enter new password
+		- Retype new password : re-enter new password.
+
+Note: If one type passwd while logged in as root it will change root passwd.
+		- Min 8 char and should pass dictionary check(not to be simple)
+
