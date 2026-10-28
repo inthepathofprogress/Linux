@@ -1,0 +1,793 @@
+	Ø "sed" command
+	- Replaces a string in a file with a new string
+	- Find and delete a line
+	- Remove empty lines
+	- Remove the first or n lines in a file
+	- To replace tabs with spaces
+	- Show defined lines from a file
+	- Substitute within vi editor
+	- …..
+	
+	$ sed 's/oldword/newword/g' filename
+	# it doesn’t change in the file just in display console
+	$ sed -i 's/oldword/newword/g' filename
+	# it will change in file 
+	
+	$ sed 's/oldword//g' filename
+	# deleted the word in the screen
+	
+	$ sed '/word/d' filename
+	# deleted the lines which has the word
+	
+	$ sed -i '/^$/d' filename
+	# deletes the empty lines 
+	
+	$ sed '1d' filename
+	# deleted first line
+	
+	$ sed '1,2d' filename
+	# delete first two lines
+	
+	$ sed 's/\t/ /g' filename
+	# removes tabs
+	
+	$ sed -n 12,18p filename
+	#dispaly 12-18 lines
+	
+	$ sed 12,18d filename
+	# displays everything except 12-18
+	
+	$ sed G filename
+	# every line has an empty line
+	
+	$ sed '8!s/oldword/Newword/' filename
+	# replace word with new word except 8th line
+	
+	$ vi filename
+	:%s/oldword/newword/
+	# replaces old word to new word in vi file
+
+	Ø Enable Password Aging
+	- The chage command - per user
+	- Eg: chage [-m mindays] [-M maxdays] [-d lastday] [-I inactive] [-E expireddate] [-W warndays] user
+	- To make them default for all users:
+	- File = /etc/login.defs
+		○ PASS_MAX_DAYS 99999
+		○ PASS_MIN_DAYS 0
+		○ PASS_MIN_LEN 5
+		○ PASS_WARN_AGE 7
+	~# more /etc/login.defs
+	
+	Chage for passwod
+	Usermod for user account
+	
+	~# useradd babubutt
+	~# id babubutt
+	
+	~# grep babu /etc/shadow
+	~# chage -m 5 -M 90  -W 10 -I 7 babubutt
+	~# grp babubutt /etc/shadow
+	  
+	
+
+	Ø User Account Management
+	- Useradd
+	- Groupadd
+	- Userdel
+	- Groupdel
+	- Usermod
+	
+	When we create a user the record is maintained in 3 different Files:
+	- /etc/passwd
+	- /etc/group
+	- /etc/shadow
+
+ eg: useradd -g superheros -s /bin/bash -c "user description" -m -d /home/spiderman spiderman
+
+$ su -
+~# useradd spiderman
+~# id spiderman
+~# cd /home/
+~# ls -ltr
+
+~# groupadd superheros
+~# cat /etc/group
+~# userdel -r spiderman
+~# ls -ltr
+~# groupadd nonewgroup
+~# cat /etc/group
+~# groupdel nonewgroup
+~# cat /etc/group
+
+~# man usermod
+~# useradd spiderman
+~# id spiderman
+~# usermod -G superheros spiderman 
+~# grep spiderman /etc/group
+~# ls -ltr
+~# chgrp -R superheros spiderman
+
+~# cat /etc/passwd
+~# cat /etc/group
+~# cat /etc/shadow
+
+
+~# useradd -g superheros -s /bin/bash -c "Ironman character" -m -d /home/ironman ironman
+~# id ironman
+
+~# passwd ironman
+-enter password
+
+
+	Ø Linux File editor
+	- A text editor is a program which enables you to create and manipulate data(text) in a linux file
+	- There are several standard text editors available on most linux systems
+		○ Vi - visual editor
+		○ Ed - standard line editor
+		○ Ex - extended line editor
+		○ Emacs - a full screen editor
+		○ Pico - Beginners editor
+		○ Vim - Advance version of vi
+	- In this we use Vi
+	- Vi Supplies commands for:
+		○ Inserting and deleting text
+		○ Replacing text
+		○ Moving around the file
+		○ Finding and substituting strings
+		○ Cutting and pasting text
+	- Most common keys:
+		○ i-insert
+		○ Esc-Escape out of my mode
+		○ r-replace
+		○ d-delete
+		○ :q!-quit without saving
+		○ :wq!-quit and save
+
+	- $ vi filename
+	- # it will be in command mode so go to insert mode "i"
+	Hello World
+	This is my first lesson 
+	- # press esc
+	- :wq! (shift  zz)
+	- $ cat filename
+	- $ vi filename
+	#press d -> this deleted the entire line
+	# press u -> it undo the delete
+	# press x -> removes one character where the cursor is placed.
+	:wq!
+
+	- $ vi filename
+	# press r -> and type any character it will replace it 
+	# press o -> creates a new line and goes into insert mode
+	# press a -> when wants to insert a word inbetween two words which has space place cursor in space 
+	:wq!
+	
+	- $ vi filename
+	# press /word -> it will search for word in file
+
+	Ø Switch Users and sudo access
+	-  su - username # switch user
+	- Sudo command 
+	- Visudo
+	
+	File - /etc/sudoers
+	
+	$ ifconfig
+	$ ip a
+	$ whoami
+	$ su - spiderman
+	enter password
+	~# exit
+	$ su -
+	enter password
+	~# su - spiderman 
+	No need of password if root is trying to switch 
+	$ exit
+	~# exit
+	
+	$ whoami
+	$ dmidecode
+	$ fdisk -l
+	$ su - 
+	Password
+	~# visudo
+	# check wheel group permissions
+	~# usermod -aG wheel username
+	~# grep wheel /etc/group
+	~# su - username
+	$ whoami
+	$ sudo dmidecode
+	$ sudo fdisk -l
+-----------------------------------------------------------
+	Ø Linux Directory service - Account Authentication
+	- Types of Accounts
+		○ Local accounts
+		○ Domain/Directory accounts
+		
+	Windows = Active directory
+	LDAP(light weight directory access protocol) protocol is used.
+	
+	Ø Difference between Active Directory, LDAP, IDM, WinBIND, OpenLDAP etc.
+	- Active Directory = Microsoft
+	- IDM = Identity Manager (Redhat)
+	- WinBind = Used in Linux to communicate with Windows (Samba)
+	- OpenLDAP (open source) 
+	- IBM Directory server
+	- JumpCloud
+
+	Ø Talking to Users
+	- Users
+	- Wall
+	- Write
+
+
+$ who
+$ users
+$ wall
+Please logoff, This system is coming down for maintenance
+--Admin
+Ctrl+d
+$ users
+$ write username
+Hi User, you are using more resources, delete few process
+Ctrl+d
+
+	Ø Monitor Users
+		○ Who
+		○ Last
+		○ W
+		○ Finger
+		○ Id
+
+$ whoami
+$ pwd
+$ hostname
+$ clear 
+
+$ who # gives how many people logged in, uid, terminal id and time logged in
+
+$ last  # gives all the details of every user who logged in and all from day 1
+$ last | more
+
+
+$ w # gives additional details like logintime, idle time and process running
+
+$ finger
+[ yum install finger -y and in centos 8 and above finger was replaced with pinky]
+
+
+$ id username
+
+	Ø Special Permissions with setuid, setgid and sticky bit
+	- All permissions on a file or directory are referred as bits
+	- -rwxrwxrwx -> bits
+	- User, group and other
+	
+	- There are 3 additional permissions in Linux
+		○ Setuid: bit tells Linux to run a program with the effective user id of the owner instead of the executor(e.g. passwd command) -> /etc/shadow
+		○ Setgid: bit tells Linux to run a program with the effective group id of the owner instead of the executor(e.g. locate or wall command)
+		# these are not actual commands, chmod is used to change the bits
+		○ Sticky bit: a bit set on files/directories that allows only the owner or root to delete those files
+		
+			§ To assign special permissions at the user level
+				□ $ chmod u+s xyz.sh
+			§ To assign special permissions at the group level
+				□ $ chmod g+s xyz.sh
+			§ To remove special permissions at the user or group level
+				□ $ chmod u-s xyz.sh
+				□ $ chmod g-s xyz.sh
+			§ To find all executables in Linux with setuid and setgid permissions
+				□ $ find / -perm /6000 -type f
+		These bits doest work on bash shell scripts
+		$ which passwd
+		$ ls -l /usr/bin/passwd
+		
+		$ chmod +t filepath
+		
+		Feature	setfacl (Access Control Lists)	setuid (Set User ID)
+		Primary Purpose	Grants or restricts read, write, or execute access for specific individual users and groups.	Allows an executable binary to run with the owner's UID/privileges.
+		Target Type	Files and directories.	Executable programs/binaries.
+		
+		
+------------------------------------------------------------------------------
+
+	Ø Processes, Jobs and scheduling
+	- Application = Service
+	- Script 
+	- Process
+	-  Daemon
+	- Threads
+	- Job
+	- Service-> Process -> Threads
+
+$ systemctl or service (old version)
+$ ps
+$ top
+$ kill
+$ crontab
+$ at
+
+	Ø Ps command
+	- Ps command stands for process status and it displays all the currently running processes in the linux system
+	- Usage examples:
+	- Ps = shows the processes of the current shell
+	- $ ps
+	- Ps -e = shows all running processes
+	- $ ps -e
+	- Ps aux = shows all running processes in BSD format
+	- $ ps aux
+	- Ps -ef = Shows all running processes in full format listing
+	- $ ps -ef
+	- Ps -u username = shows all processes by username
+	- $ ps -u root
+
+-$ ps -ef | grep 750
+$ ps -ef | grep firealld
+
+
+	Ø System Utility commands
+	- Date
+		○ $ date
+	- Uptime
+		○ $ uptime
+	- Hostname
+		○ $ hostname
+	- Uname
+		○ $ uname
+		○ $ uname -a
+	- Which
+		○ $ which cmd
+		○ $ which date 
+	- Cal
+		○ $ cal
+		○ $ cal 9 1977
+		○ $ cal 2016
+	- Bc # binary calculator
+		○ $ bc
+		2 + 2
+		..
+		quit
+
+	Ø Systemctl Command
+	- Systemctl called system control
+	- Systemctl command is a new tool to control system services
+	- It is available in version 7 and later and it replaces the service command
+	Usage eg:
+	$ systemctl start|stop|status serviename.service 
+	$ systemctl enable|disable servicename.service
+	$ systemctl restart|reload servicename.service
+	$ systemctl list-units --all
+	
+	$ systemctl status firewalld.service
+	
+	-  To add a service under systemctl management:
+	Create a unit file in /etc/systemd/system/servicename.service 
+	- To control system with systemctl
+		○ $ systemctl poweroff
+		○ $ systemctl halt
+		○ $ systemctl reboot
+
+	Ø Top command
+	- Top command is used to show the Linux processes and it provides a real time view of the running system
+	- This command shows the summary information of the system and the list of processes or threads which are currently managed by the Linux kernel
+	- When the top command is executed then it goes into interactive mode and you can exit out hitting q
+	- Usage
+	- Top
+	- $ top
+	- Top -u username - shows tasks/processes owned by username
+	- $ top -u root
+	- Top then press c= shows commands absolute path ( in interactive mode)
+	- Top then press k=kill a process by PID within top session ( in interactive mode)
+	- Top then M and P = To sort all Linux running processes by Memory usage ( in interactive mode)
+Top command refreshes the information every 3 seconds
+
+	
+	
+	
+	
+
+	Ø Kill Command
+	- Kill command is used to terminate processes manually
+	- It sends a signal which ultimately terminates or kills a particular process or group of processes.
+	Usage:
+	$ kill [option] [pid]
+	
+	Kill -l= to get a list of all signal names or signal number
+	$ kill -l
+	Most used signals are:
+	Kill pid = kill a process with default signal
+	Kill -1 pid = restart
+	Kill -2 = Interrupt from the keybard just like ctrl+c
+	Kill -9 = Forcefully kill the process 
+	Kill -15 = Kill a process gracefully
+	- Other similar kill commands are:
+	killall
+	pkill
+	
+
+	Ø Process Signals in Linux
+	- Process = Running program in computer
+	- Signals = Short messages sends to process
+		○ A way to interrupt, communicate, control with processes without modifying the code
+	- Process Signals = Send signals to running processes to control their behaviour
+	- Types of process signals
+		○ Standard signals - Predefined signals os sends to processes and has fixed meaning like stop, pause, terminate
+			§ Few Standard signals are:
+				□ SIGINT (Signal Interrupt) $ kill -SIGINT PID
+				□ SIGTERM (Signal Terminate) $ kill -SIGTERM PID
+				□ SIGKILL (signal kill) 
+				□ SIGSTOP (signal stop)
+				□ SIGCONT(signal continue)
+				□ SIGSEGV(signal segmentation fault)
+				□ ………
+		○ Real time signals - Sends extra information with signal such as numbers or messages
+			§ Real time signals are queued.
+			§ There are 3 types of real time signals:
+				□ SIGRTMIN marks the beginning if signal range
+				□ SIGRTMAX end of signal range 
+				□ Intermediate Signals used for custom processes
+				
+		
+----------------------------------------------------------
+
+	Ø System monitoring commands
+	- Top
+		○ $ top
+		
+	- Df
+		○ $ df 
+		○ $ man df
+		○ $ df -h
+		○ $ man du
+		
+	- Dmesg
+		○ $ dmesg
+		○ $ dmesg | more
+		
+	- Iostat
+		○ $ iostat
+		○ $ iostat 1 (ctrl c)
+		
+	- Netstat / ip & ss
+		○ $ iproute
+		○ $ ip route | column -t
+		○ $ ss | more
+		
+	- Free
+		○ $ free
+		
+	- Cat /proc/cpuinfo
+		○ $ cat /proc/cpuinfo
+		
+	- Cat /proc/meminfo
+		○ $ cat /proc/meminfo
+
+	Ø System Logs monitoring
+	- Log Directory = /var/log
+		○ $ cd /var/log
+		○ $ ll
+		○ $ ll | more
+		
+	- Boot
+		○ $ more boot.log
+		
+	- Chronyd = NTP
+		○ $ cd chrony
+		○ $ ls -ltr
+		
+	- Cron
+		○ $ more cron
+	- $ dmesg
+		
+	- Maillog
+		○ $ more maillog
+	- Secure
+		○ $ more secure
+		○ $ tail -f secure
+	- Messages
+		○ $ more cd /var/log
+		○ $ more messages
+	- Httpd
+	
+
+	Ø Journalctl for troubleshooting and logs
+	- Journal
+		○ System messages in jjournal
+		○ Manage by (systemd- journald)
+	- Journalctl
+		○ Read log messages
+
+$ journalctl
+$ journalctl | less
+$ journalctl -n 20  # last 20 lines
+$ journalctl -f # live monitoring
+$ journalctl -b # for boot related
+$ journalctl --list-boots # for earlier boot sessions
+$ journalctl -u sshd #for specific service
+$ journalctl --since today 
+$ jounralctl --since "2026-02-11 10:00:00"
+$ jounralctl -p err
+$ journalctl -p warning
+$ journalctl -xe # x-extra explanation e end of journal
+$ journalctl --no-pager
+$ journalctl /usr/sbin/sshd
+$ journalctl UID=1000
+$ journalctl -u sshd > sshd_logs.txt
+$ ls 
+$ cat sshd_logs.txt
+$ journalctl --disk-usage
+
+	Ø SOS Report
+	- Collect and package diagnostic and support data
+	- Package name: sos-version
+	- Command - sosreport
+$ sosreport
+
+	Ø At command
+	- At command is like crontab which allows you to schedule jobs but only once
+	- When the command is run it will enter interactive mode and you can get out by pressing ctrl D
+	Usage:
+		Atd - at daemon/service that manages scheduling
+		Systemctl status atd - to manage the atd service
+		At HH:MM PM - schedule a job
+		Atq - List the at entries
+		Atrm # - Remove at entry
+		
+	$ date
+	$ at 5:00 PM 
+	echo "This is my at entry" > at-entry
+	Ctrl D
+	$ atq
+	$ ls -ltr
+	
+	$ at 2:45 AM 101626 # schedule a job to run on Oct 16 2026 at 2:45 AM
+	$ at 4PM + 4 days # schedule a job at 4PM four days from now
+	$ at now +5 hours # schedule a job to run five hours from now
+	$ at 8:00 AM Sun # schedule a job to 8 AM on coming Sunday
+	$ at 10:00 AM next month # schedule a job to 10 AM next month
+
+	Ø Crontab command
+	- Crontab command is used to schedule tasks
+	- Usage:
+		Crond - crontab daemon/service that manages scheduling
+		Systemctl status cond - to manage the crond service
+		Crontab -e = edit the crontab
+		Crontab -l = list the crontab entries
+		Crontab -r = remove the  crontab
+		
+	- Crontab format
+	Minute(0-59) hour(0-23) dayofthemonth(1-31) month(1-12) dayoftheweek(0-6)(Sunday-Saturday) <commandtoexecute>
+	
+	$ date
+	$ crontab -e
+	21 16 * 10 * echo "This is my crontabentry" > crontab-entry
+	:wq!
+	$ date
+	$ ls -ltr
+	
+	$ crontab -l
+	$ crontab -r
+	$ crontab -l
+	
+	$ systemctl status crond
+	
+	
+	- By default there are 4 different types of cronjobs
+		○ Hourly
+		○ Daily
+		○ Weekly
+		○ Monthly
+	- One way crontab -e other way add scrip in hourly,… directories
+	- All the above crons are setup in /etc/cron.___ (directory)
+	- The timing for each are set in /etc/anacrontab except hourly
+	- For hourly /etc/cron.d/0hourly
+	$ cd /etc
+	$ ls -l cron.*
+	$ ls -l | grep cron
+	$ cd cron.daily
+	$ ls -l
+	$ cd ..
+	$ cat /etc/anacrontab
+	$ cat /etc/cron.d/0hourly
+
+	Ø Terminal control keys
+	- Several key combinations on keyboard usually have a special effect on the terminal
+	- The most common control keys are:
+		○ Ctrl u - erase everything typed on the command line
+		○ Ctrl c - stop/kill a command
+		○ Ctrl z - suspend a command
+		○ Ctrl d - exit from an interactive program ( signals end of data)
+
+	Ø Terminal commands
+	- Clear - clears screen
+		○ $ clear
+	- Exit - exit out of the shell, terminal or a user session
+		○ $ exit
+	- Script - the script command stores terminal activities in a log file that can be named by a user, when a name is not provided by a user, the default file name, typescript is used.
+		○ $ script name
+
+	Ø  Process Management
+	- Background = ctrl z, jobs and bg
+	- Foreground = fg
+	- Run process even after exit = nohup process & 
+	- Or nohup process > /dev/null 2>/&1 &
+	- Kill a process by name = pkill
+	- Process priority = nice ( eg: nice -n 5 process)
+		○ The niceness scale goes from -20 to 19. The lower the number more priority that task gets
+	- Process monitoring = top
+	- List process = ps
+	$ ip addr / ip a
+	$ sleep 100
+	Ctrl z # stopped process
+	$ jobs
+	$ bg
+	$ jobs
+	$ ps -ef | grep sleep
+	$ fg
+	
+	$ nohup sleep 75 &
+	$ jobs
+	$ ls -ltr
+	$ more nohup.out
+	$ nohup sleep 73 > /dev/null 2>&1 &
+	$ fg
+	
+	$ jobs
+	$ nice -n 5 sleep 10
+	
+	
+	
+	
+	
+	
+	
+
+	Ø Finding system information
+	- $ cat /etc/redhat-release
+	- $ uname -a
+	- $ dmidecode
+
+	Ø  Changing System Hostname
+	- $ hostname
+	- $ hostnamectl set-hostname newhostname
+	- $ hostname
+	- $ init 6/reboot
+	
+	Version 7 =  edit /etc/hostname
+	Version 6 = edit /etc/sysconfig/network
+
+
+	Ø System architecture
+	- A big difference between 32-bit processors and 64-bit processors is the number of calculations per second they can perform, which affects the speed at which they can complete tasks. 64-bit processors can come in dual core, quad core, six core and eight core versions for home computing. Multiple cores allow for an increased number of calculations per second that can be performed, which can increase the processing power and help make a computer run faster. Software programs that require many calculations to function smoothly can operate faster and more efficiently on the multi-core 64-bit processors.
+	- Linux - $ arch
+	- Windows - My computer -> Properties.
+
+
+	Ø Recover root password
+	- Restart computer
+	- Edit grub
+	- Change password
+	- Reboot
+	- $ reboot
+	- After reboot when the system asked to select the os select the os and press e
+	- Go down check for ro
+	- Remove ro 
+	- rw init=/sysroot/bin/sh
+	- Ctrl x
+	- $ chroot /sysroot
+	- $ passwd root
+	- $ exit
+	- $ reboot
+
+Before exiting update selinux information by running $ touch /.autorelabel
+
+For sentos 9 no need to remove ro go to end of that line and add rd.break and press ctrl x to start, ctrl c for a command prompt or escape to discard edits and return to the menu. Pressing tab lists possible completions
+	
+	
+
+	Ø System Maintenance commands
+		○ Shutdown
+			§ $ shutdown
+		○ Init 0-6
+			§ $ init 0-7
+		○ Reboot
+			§ $ reboot
+		○ Halt
+			§ $ halt
+------------------------------------------------------------
+
+	Ø The Screen Command
+	- $ ip a
+	- $ rpm -q | grep screen
+	- $ dnf install screen
+	- $ dnf install epel-release
+	- $ dnf install screen
+	- $ screen
+	- Alt a shift | # creates a vertical split
+	- Alt a shift S # creates a horizontal split
+	- Alt a tab # moves to split or window
+	- Alt a c # screen will be active
+	- $ ip a
+	- Alt a tab
+	- Alt a c
+	- $ ssh username@ipaddressofanothermachine
+	- $ ip a
+
+	- $ screen -r # reconnect to previously detached session and connect to it
+	- $ screen -r id
+	
+	
+
+	Ø Environment variables
+	- An environment variable is a dynamic named value that can affect the way running processes will behave on a computer. They are part of the environment in which a process runs
+	- In simple words, set of defined rules and values to build an environment
+	- To view all environment variables
+		○ Printenv or env
+		○ $ printenv
+		○ $ env
+	- To view one environment variable
+		○ Echo $variable _name
+		○ $ echo $MAIL
+		○ 4 echo $PATH
+		○ $ echo $SHELL
+	- To set the environment variables
+		○ Export test=1
+		○ Echo $test
+		○ $ export TEST=1
+		○ $ echo $TEST
+		This is not permanent, if logout then this will go away
+		
+	- To set environment variable permanently
+		○ Vi .bashrc
+		○ Test='123'
+		○ Export Test
+		○ $ cp .bashrc bashrc.orig
+		○ $ vi .bashrc
+			§ TEST='123' 
+			§ export TEST # add at end
+		○ :wq!
+		○ $ echo $TEST
+	- To set global environment variable permanently
+		○ Vi /etc/profile or /etc/bashrc
+		○ Test='123'
+		○ Export Test
+		○ $ ls - l /etc/profile
+		○ $ ls -l /etc/bashrc
+		
+		
+	
+	
+
+	Ø  The tmux(terminal multiple command) command
+	- Modern and dynamic alternative to screen command
+	- $ ip a
+	- $ rpm -qa | grep tmux
+	- $ dnf install tmux -y
+	- $ tmux
+	- Ctrl b shift % # divides side by side 
+	- Ctrl b and arrows # to switch between screens
+	- Ctrl b shift " # horizontal split
+	- Ctrl b d # dtaches the sessions
+	- $ tmux ls
+	- $ tmux a
+	- $ tmux new -s name
+	- ctrl b c # open a new window
+	- ctrl b n # to switch between windows
+	- ctrl d # closes the window
+	
+	- $ tmux ls
+	- $ tmux attach-session -t 0
+	- Ctrl d # to terminal the pane
+	- Ctrl b , # to rename the window name
+
+	- $ tmux ls
+	- $ tmux kill-session -t 0
+	- $ tmux ls
+	
+---------------------------------------------------------------------
+
+
+
+	
+	
+
