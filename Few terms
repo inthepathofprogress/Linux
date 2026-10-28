@@ -1,0 +1,12 @@
+	Ø Command Prompt 
+	- A command prompt, also referred to simple as a prompt, is a short text at the start of the command line followed by prompt symbol on a command line interface
+		○ [root@myvm ~]# 
+		○ username@hostname~promptsymbol
+		○ # for root $ for normal user, it can be modified
+	Ø Root
+	- There are 3 types of root on Linux system
+		○ Root account : root account on linux machine is the most powerful which has access to all commands and files.
+		○ Root as / : the very first directory is also referred as root directory
+		○ Root home directory : the root user account also has a directory located in /root which is called root home directory 
+	
+	
