@@ -1,0 +1,39 @@
+	Ø Command Syntax
+	- Command options and arguments
+	- Command typically have the syntax:
+		○ Command option(s) argument(s)
+	- Options:
+		○ Modify the way that a command works
+		○ Usually consist of a hyphen or dash followed by a single letter
+		○ Some commands accept multiple options which can usually be grouped together after a single hyphen
+	- Arguments:
+		○ Most commands are used together with one or more arguments
+		○ Some commands assume a default argument if none is supplied
+		○ Arguments are optional for some commands and required by others.
+
+	Ø Access Control Lists
+	
+	What is ACL?
+		Access control list (ACL) provides an additional, more flexible permission mechanism   for file systems. It is designed to assist with UNIX file permission. ACL allows you to give permissions for any user or group to any disc resource.
+		
+	Use of ACL:
+		- Think of a scenario in which a particular user is not a member of group created by you but still you want to give some read or write access, how can you do it without making user a member of group, here comes in picture Access Control Lists. ACL helps us to do this trick.
+		- Basically, ACLs are used to make a flexible permission mechanism in Linux.
+		- From Linux man pages, ACLs are used to define more fine-grained discretionary access rights for files and directories.
+		- From Linux man pages, ACLs are used to define more fine-grained discretionary access rights for files and directories.
+		- Commands to assign and remove AC permissions are:
+			§ Setfacl and getfacl 
+		- List of commands for setting up ACL:
+			1. To add permission for user. 
+			- $ setfacl -m u:user:rwx /path/to/file 
+			2. To add permissions for a group
+			- $ setfacl -m g:group:rw /path/to/file 
+			3. To allow all files or directories to inherit ACL entries from the directory it is within 
+			- $ setfacl -Rm "entry" /path/to/dir 
+			4. To remove a specifc entries 
+			- $ setfacl -x u:user .path/to/file (For a specific user)
+			5. To remove all entries
+			- $ setfacl -b /path/to/file (For all users)
+		Note: As you assign the ACL permissions to a file/directory. It adds + sign at the end of the permission.
+		Setting w permission with ACL does not allow to remove a file. 
+		
