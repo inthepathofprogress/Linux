@@ -1,0 +1,66 @@
+	Ø Input and Output redirects
+There are 3 redirects in Linux
+	- Standard Input(stdin) and it has file descriptor number as 0
+	- Standard output(stdout) and it has file descriptor number as 1
+	- Standard error(stderr) and it has file descriptor number as 2
+	
+	
+	
+• Output(stdout) - 1
+	- By default when running a command its output goes to the terminal
+	- The output of a command can be routed to a file using > symbol
+		○ Eg: ls - l > listing
+		○       pwd > findpath
+	- If using the same file for additional output or to append to the same file then use >> 
+		○ Eg: ls -la >> listings
+		○        echo "Hello World" >> findpath
+•  Input(stdin) - 0
+	-  Input is used when feeding file contents to a file
+		○ Eg: cat < listings
+		○    mail -s "Office memo" allusers@abc.com < memoletter
+• Error(stderr) - 2
+	- When a command is executed we use a keyboard and that is also considered (stdin-0)
+	- That command output goes on the monitor and that output is (stdout-1)
+	- If the command produced any error on the screen then it is considered (stderr-2)
+		○ We can use redirects to route errors from the screen
+			§ Eg : ls -l /root 2> errorfile
+			§        telnet localhost 2> errrorfile
+
+
+	Ø 3 simple ways to add text to a file
+	- Vi / editor
+	- Redirect command output > or >>
+	- Echo > or >>
+$ echo " hi my name is imran"
+$ echo "Jerry Seinfield is the main character in the show seinfield" > Jerry
+$ cat jerry
+$ echo "Jerry show was created in 1989" >> jerry
+$ cat jerry
+$ echo "Jerry Seinfield is the main character" > Jerry
+$ cat jerry
+
+
+$ touch listingofdir
+$ ls -ltr
+$ ls -ltr > listingofdir
+$ cat listingofdir
+$ date
+$ date >> jerry
+$ cat jerry
+
+
+Ø Standard output to a file ( tee )
+- "tee" command is used to store and view (both at the same time) the output of any command
+- The command is named after the T-splitter used in plumbing. It basically breaks the output of a program so that it can be both displayed and saved in a file. It does both the tasks simultaneously, copies the result into the specified files or variables and also display the result.
+
+$ echo " David Puddy is Eliane's friend"
+$  echo " David Puddy is Eliane's friend" > eliane-david
+$ eliane-david
+$  echo " David Puddy is Eliane's friend" | tee eliane-david
+$  echo " David Puddy and Eliane" | tee -a eliane-david #append
+$ ls -l | tee file1 file2 file3
+$ tee --help
+$ tee --version
+
+
+
