@@ -1,0 +1,177 @@
+	Ø File Display commands
+	- Cat
+		○ $ cat filename
+	- More
+		○ One page at a time
+		○ $ more filename #spacebar and q
+	- Less
+		○ One screen at a time
+		○ $ less filename # spacebar and q and j or uparrow for 1 line up and k 1 line down
+	- Head
+		○ $ head -n filename
+	- Tail
+		○ $ tail -n filename
+
+
+	• Awk
+	- Awk is a utility/language designed for data extraction. Most of the time it is used to extract fields from a file or from an output
+	- $ awk --version
+	- $ awk '{print $1}' filename # list 1st field from a file
+	- $ ls -l | awk '{print $1,$3}' # list 1 and 3 fields of ls -l output
+	- $ ls -l | awk '{print $NF}' # Last field of the output
+	- $ awk '/word/ {print}' filename # Search for a specific word
+	- $ awk -F: '{print $1)' filename # output 1st field of delimiter of the file
+	- $ echo "Hello Tom" | awk '{$2="Adam"; print $0}' # replace words field words
+	- $ awk 'length($0) > 15' file # Get lines that have more than 15 byte size
+	- $ ls -l | awk '{if($9 == "searchword"} print $0;}' # Get the field matching searchword in home dir
+	- $ ls -l | awk '{print NF}' # Number of fields
+
+	Ø Pipes
+	- A Pipe is used by the shell to connect the output of one command directly to the input of another command.
+	The symbol for a pipe is the vertical bar (|). 
+	The command syntax is: command1 [arguments] | command2 [arguments]
+	$ cd /etc
+	$ ls - ltr
+	$ ls -ltr | more # more-one page at a time -> spacebar and q
+	$ ll # ls -l
+	$ ls -l | tail -1
+
+	• Truncate File size (truncate)
+	- The Linuz truncate command is often used to shrink or extend the size of a file to the specified size. (unlike compressing like gzip it will chop the data, the data might lost)
+		○ $ truncate -s 10 filename
+
+	• Combining and Splitting files
+	- Multiple files can be combined into one and 
+	- One file can be split into multiple files
+		○ $ cat file1 file2 file3 > file4
+		○ $ split file4
+		○ $ split -l 300 file.txt childfile
+	- Split file.txt into 300 lines per file and output to childfileaa, childfileab and childfileac
+
+	Ø Executing multiple commands with ;
+	- $ ls ; pwd; whoami
+	- Works independently, even one fails the next one continues to run
+	- $ echo "Hello" ; echo "World"
+	- $ mkdir test_dir; cd test_dir; touch test_filte.txt
+	- $ ls
+	- $ ls ; invalid_command; echo "completed"
+	
+	
+
+	• Grep/egrep
+	- The grep command which stands for " global regular expression print" processes text line by line and prints any lines which match a specified pattern
+	- $ grep --version
+	- $ grep -- help
+	- $ man grep
+	- $ grep keyword filename # Search for a keyword from a file
+	- $ grep -c keyword filename # search for a keyword and count it
+	- $ grep -i keyword file # search for a keyword ignore case-sensitive
+	- $ grep -n keyword filename # Display the matched lines and their line numbers
+	- $ grep -v keyword filename # Display everything except keyword
+	- $ grep keyword filename | awk '{print $1}' 
+	- $ ls -l | grep Desktop
+
+
+	- $ egrep -i "keyword1|keyword2" filename
+
+	Ø Filters/Text processors commands
+	- Cut
+	- Awk
+	- Grep and egrep
+	- Sort
+	- Uniq
+	- Wc
+	
+
+	• Linux vs windows commands
+	- Listing of a directory 	dir	Ls - l
+	Rename a file	Ren	Mv
+	Copy a file	Copy	Cp
+	Move file	Move	Mv
+	Clear screen 	Cls	Clear
+	Delete file	Del	Rm
+	Compare contents of files	Fc	Diff
+	Search for a word/string in a file	Find	Grep
+	Display command help	Command /?	Man command
+	Displays your location in the file system 	Chdir	Pwd
+	Displays the time 	Time	date
+
+	Ø File maintenance Commands
+		○ Cp
+			§ $ cp source destination
+			§ # can create a new file
+		○ Rm
+			§ $ rm filename
+		○ Mv
+			§ $ mv source destination
+			§ # can rename the filename
+		○ Mkdir
+			§ $ mkdir nameofdir
+		○ Rmdir or rm -r
+			§ $ rmdir nameofdir
+			§ $ rm -r nameofdir
+			§ # rm -rf will forcedully remove sub-directories and its contents as well 
+		○ Chgrp
+			§ $ chgrp user filename
+		○ Chown
+			§ $ chown user filename
+			§ $ chown user:user filename # changes both group and owner once
+
+	• Cut
+	- Cut is a command line utility that allows you to cut parts of lines from specified files or piped data and print the result to standard output. It can be used to cut parts of a line by delimiter, byte position, and character.
+	- $ cut --version # checks version
+	- $ cut --help
+	- $ man cut
+	- $ cut -c1 filename # list first character
+	- $ cut -c1,2,4 filename #pick and chose character
+	- $ cut -c1-3 filename # list range of characters 
+	- $ cut -c1-3,6-8 filename # List specific range of characters
+	- $ cut -b1-3 filename # list by byte size
+	- $ cut -d: -f 6 filename # list first 6th column separated by :
+	- $ cut -d: -f 6-7 filename # List first 6 and 7th column separated by :
+	- $ ls -l | cut -c2-4 # Only print user permissions of files/dir
+	
+
+	•  sort/uniq
+	- Sort command sorts in alphabetical order
+	- Uniq command filters out the repeated or duplicate lines
+	- $ sort --version
+	- $ sort --help
+	- $ man sort
+	- $ sort filename # sorts in alphabetical order
+	- $ sort -r filename # sorts in reverse alphabetical order
+	- $ sort -k2 file # sort by field number
+	- $ uniq filename # removes duplicates
+	- $ sort filename | uniq # always sort first before using uniq their line number
+	- $ sort file | uniq -c # sort first then uniq and list count
+	- $ sort file | uniq -d # show only repeated lines
+
+	•  wc 
+	- The command reads either standard input or a list of files and generates: newline count, word count and byte count
+	- Doesn’t work on directories
+	- $ wc --version
+	- $ wc --help
+	- $ wc filename # checks file line count, word count and byte count
+	- $ wc -l file # Get the number of lines in a file
+	- $ wc -w filename # Get the number of words in a file
+	- $ wc  -c filename # get the number of bytes in a file
+	- $ wc -m filename # get the number of chars in a file 
+	- $ ls -l | wc -l # Number of files
+	- $ grep keyword | wc -l  # Number of keyword lines.
+	
+
+	•  Compare Files (diff and cmp)
+	- Diff ( line by line)
+	- Cmp (byte by byte)
+	- $ diff file1 file2
+	- $ cmp file1 file2
+
+	• Compress and un-compress files
+	- Tar
+		○ $ tar cvf name.tar location/files # group
+		○ $ tar xvf name.tar  #ungroup
+	- Gzip
+		○ $ gzip name.tar # compress, reduces the size
+	- Gzip -d or gunzip
+		○ $ gzip -d name.tar.gz
+	
