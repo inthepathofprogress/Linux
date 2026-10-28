@@ -1,0 +1,295 @@
+	Ø The systemd-analyze command
+	- $ man systemd-analyze
+	- $ system-analyze time
+	- $ systemd-analyze blame
+	- $ systemd-analyze blame --user
+
+	Ø System Run Level
+	- Main Run level
+		○ 0 - shutdown (or halt) the system
+			§ $ init 0
+		○ 1 - single user mode, usually aliased as s or S
+			§ $ inti 1/s/S
+		○ 6 - reboot the system
+			§ $ init 6 / $ reboot
+	- $ who -r # shows which run level the system is in 
+	- Other run levels
+		○ 2 - multiuser mode without networking
+		○ 3 - multiuser mode with networking
+		○ 5 - multiuser mode with networking and GUI
+Run level 4 is undefined or not used/user-definable
+
+	Ø Message of the day
+	- Message of the day file location
+		○ /etc/motd
+		
+		○ $ vi /etc/motd
+		This is linux machine
+		Use it to practise
+		Not authrorised then exit
+		:wq!
+		
+		○ $ cat /etc/motd
+		○ $ ip a/ifconfig
+		○ Login to putty and check
+
+	Ø Computer Boot Process
+	- Switch/Power-> motherboard(CPU -> BIOS(basic input and output software ) -> ROM (Chip on BIOS) , Post (power on self test)->BIOS ->  CMOS ( complimentary metal oxide semiconductor) -> CMOS battery ->  BIOS -> DISK -> MBR(Master Boot record 1st sector on HDD which has master OS info) -> Memory -> CPU)
+	- This entire process is called Bootstrap
+
+	Ø Custom message of the day
+	- Message of the day is the first message users will see when they login in to the linux machine
+	- To customise
+		○ Create a new file in /etc/profile.d/motd.sh
+		○ Add desired commands in motd.sh file
+		○ Modify the /etc/ssh/sshd_config file to edit
+		#PrintMotd yes to PrintMotd no
+		○ Restart sshd service
+			§ $ systemctl restart sshd.service
+	- # /etc/profile.d/
+	- # vi motd.sh
+	#!/bin/bash
+	#
+	echo -e "
+	###################
+	#
+	# Welcome to `hostname`
+	# This system is running `cat /etc/redhat-release`
+	# kernel is `uname -r`
+	#
+	# You are logged in as `whoami`
+	#
+	##################
+	"
+	:wq!
+	- # cp /etc/ssh/sshd_config /etc/ssh/sshd_config.back
+	- # ls -l /etc/ssh/sshd_config*
+	- # vi /etc/ssh/sshd_config
+	#PrintMotd yes to PrintMotd no (search using /PrintMod)
+	;wq!
+	- # systemctl restart sshd.service
+	- Login through another terminal 
+
+	Ø Linux Boot process
+	- BIOS	Basic input/output system executes MBR
+	MBR	Master Boot Record executes GRUB
+	GRUB	Grand Unified Bootloader executes kernel
+	Kernel	Kernel executes /sbin/init
+	Init	Init executes runlevel programs
+	Runlevel	Runlevel programs are executed from /etc/rc.d/rc*.d/
+	- Newer version of linux - /etc/systemd/system/default.target
+	- To set new default run-level run
+	- # systemctl set-default [new target]
+	- Older version of linux - /etc/inittab
+	- Init is an executable command which runs at the time of starup.
+	- To set run-level modify: # /etc/inittab
+	- Init configuration files are located in /etc/init.d
+	
+
+	Ø Linux Boot Process (Newer versions)
+	- The boot sequence changes in Centos/Redhat 7 and above
+	- Systemd is the new service manager in centos/rhel 7 that manages the boot sequence
+	- It is a backward compatible with SysV init scripts used by provious versions of Redhat linux including RHEL 6
+	- Power on -> BIOS (basic input and output setting firmware interface, POST power on self test started) -> MBR ( Master boot record 1st sector of HDD indicates where GRUB2 is located -> GRUB2(Grand unified boot loader v2 loads linux kernel /boot/grub2/grub.cfg) -> kernel (core of os load required drivers from initrd.img, start first os process systemd) -> systemd (system daemon pid#1, reads /etc/systemd/system/default.targert to bring the system to run level)
+
+-------------------------------------------------------------
+
+	Ø Extend disk using LVM
+	- If the disk is full, we can
+		○ Delete older files to free up disk space
+		○ Add new physcial disk mount to /disk2
+		○ Create a new virtual disk and mount to /disk2
+		○ Or extend disk through lvm
+	- Add disk from virtual box
+	- $ su -
+	- # df -h
+	- # fdisk -l | more
+	- # fdisk /dev/sdd
+	- -n
+	- -p
+	- Default
+	- Default
+	- -p
+	- -t
+	- L
+	- 8e
+	- -p
+	- -w
+	- # fdisk -l | more
+	- # init 6
+	- $ su-
+	- # fdisk -l /dev/sdd1
+	- # pvdisplay
+	- # pvs
+	- # vgdisplay name_vg
+	- # pvcreate /dev/sdd1
+	- # pvdisplay
+	- # vgextend name_vg /dev/sdd1
+	- # vgdisplay name_vg
+	- # lvextend -L+1024M /dev/mapper/name_vg/name_lv
+	- # xfs_growfs /dev/mapper/name_vg/name_lv
+	- # df -h
+	
+
+	Ø Storage
+	- Types of storage
+		○ Local Storage
+			§ RAM, HDD, SSD, egc
+		○ DAS (Direct Attached Storage)
+			§ CD/DVD, USB flash drive, external disk directy attched with USB or other cables
+		○ SAN ( Storage Area Network)
+			§ Storage attached through iSCSI or fiber cable #HPA/SAN Cards
+		○ NAS (Network attached storage)
+			§ Storage attached over network (TCP/IP)
+			§ Samba, NFS etc
+
+	Ø Logical volume management
+	- LVM allows disks to be combined togather
+	- Physical volume [disk 1] -> Volume Group -> Logical volumes[Systems, home,swap, …C:,D:,E:]
+	- Physical volume [disk2,disk3,disk4] -> volume group -> Logical volumes [ data1, data2, data3,…]
+	- The adavantage of LVM is we can add another disk to the volume group and increase the size and add that space to volume
+	
+
+	Ø LVM configuration during install
+	- Virtural Box
+		○ New -> image -> size,….
+		○ Start-> install -> language -> date and time, keyboard, language support, installatin source, software selection, installation destination, kdump, network and hostname, security policy
+		○ Installation destinatioon -> select disk-> Partitioning (I will configure) -> Done 
+		○ Create mount points
+		○ Done
+		○ Passwords and continue installation.
+		○ $ df -h
+		○ /dev/mapper means its lvm 
+
+	Ø Disk Partition
+	- Commands for disk partition
+		○ Df
+		○ Fdisk
+	- $ df 
+	- $ df -h
+	- $ fdisk
+	- $ fdisk -l
+
+	Ø Add disk and create new LVM partition
+	- Hard disks ( /dev/sda, /dev/sdb, /dev/sdc) ->
+		○ Add hard disk in virtual box
+		○ $ su -
+		○ # fdisk -l | more
+	- Partitions (/dev/sda1. /dev/sdb1, /dev/sdc1) ->
+		○ # fdisk /dev/sdc
+			§ n#new
+			§ p#primary
+			§ 1#partiton number
+			§ #first sector
+			§ #last sector
+			§ p#to check
+			§ t#change type of partition
+			§ L#hex codes associated 
+			§ 8e#for linux lvm
+			§ p#to check
+			§ w#write changes
+	- Physical volume ( /dev/sda1, /dev/sdb1, /dev/sdc1) ->
+		○ # pvcreate /dev/sdc1
+		○ # pvdisplay
+	- Volume group ( datavg ) ->
+		○ # vgcreate name_vg /dev/sdc1
+		○ # vgdisplay name_vg
+	- Logical volume(s) ( datalv) ->
+		○ # lvcreate -n name_lv --size 1G name_vg
+		○ # lvdisplay
+	- File system (datafs)
+		○ # mkfs.xfs /dev/name_vg/name_lv
+	- Mount
+		○ # mkdir name_dir
+		○ # mount /dev/name_vg/name_lv /data
+		○ # df -h
+
+
+	Ø Add disk and create partition
+	- In a Virtual Box:
+		○ Poweroff vm, go to snapshot and create a snapshot
+		○ Settings-> storage-> controllersata -> add hard disk -> Create new -> vdi, dynamically allocated, name, size.
+		○ Power on
+	- $ su -
+	- # df -h
+	- # fdisk -l | more
+	- # fdisk /dev/sdb #name of disk
+	-help(help for fdisk)
+	-n # new partition
+	-p # Partition type : primary or extended 
+	-#partition number(1-4, default 1):
+	-#first sector(2048-….., default 2048):
+	-#last sector,…
+	Partition done
+	-w#to confirm changes
+	- # fdisk -l
+	- # mkfs.xfs /dev/sdb1
+	- #mkdir /data
+	- # ls -l
+	- # mount /dev/sdb1 /data
+	- # df -h
+	- # vi /etc/fstab # to mount data after reboot or restart)
+	#add entry
+	#Hit o to add
+	/dev/sdb1    /data    xfs    defaults    0    0
+	:wq!
+	- # init 6
+	- # df -h
+	- # umount /data
+	- # df -h
+	- # mount -a
+	- # df -h
+	
+
+	Ø Adding Swap space
+	- Swap space in Linux is used when the amount of physical memory (RAM) is full. If the system needs more memory resources and the RAM is full, the inactive pages in memory are moved to the swap space. While swap space can help machines with a small amount of RAM, it should not be considered a replacement for more RAM. Swap space is located on hard drives, which have a slower access time than physical memory..
+	- Recommended swap size is twice the size of RAM
+	- If M(RAM) <2G, then S(Swap) = M*2, else S=M+2
+	- Commands
+		○ Dd
+		○ Mkswap
+		○ Swapon or swapoff
+	- $ df -h
+	- $ free -m
+	- $ su -
+	- # dd if=/dev/zero of=/newswap bs=1M count=1024
+	- # cd /
+	- # ls -ltr
+	- # chmod go-r newswap
+	- # ls -ltr
+	- # mkswap /newswap
+	- # free -m
+	- # swapon /newswap
+	- # free -m
+	- # vi /etc/fstab
+	/newswap    swap     swap    defaults     0     0
+	:wq!
+	- # init 6
+	- # free -m
+	
+
+	Ø  The xfs_info command
+	- Xfs_info designed for XFS
+	- XFS
+		○ Journaling file system in Linux
+		○ Hierarchical structure
+		○ Efficiently manages disk space
+		○ Ensures data integrity
+	- Xfs_info utility
+		○ Used to display detailed information about XFS file system. Such as
+			§ Size
+			§ Block size
+			§ Structure of file system
+			§ System monitoring
+			§ Troubleshooting
+			§ Capacity planning
+			§ $ xfs_info partitionname
+	- $ df -T # types of file system machine is using
+	- $ man xfs_info
+	- $ xfs_info -v
+	- $ xfs_info /dev/mapper/cs-root #path of partition
+	
+	
+			
+
+
