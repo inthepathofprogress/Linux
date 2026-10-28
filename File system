@@ -1,0 +1,154 @@
+	Ø What is a File system?
+	- It is a system used by an operation system to manage file. The system controls how data is saved or retrieved.
+	- Operating system stores files and directories in an organized and structed way 
+	- There are many different types of filesystems. In general, improvements have been made to filesystems with new releases of operating systems and each new file system has been given a different name 
+		○ ext3, ext4, xfs - linux filesystems
+		○ NTFS, FAT - windows filesystems
+
+	Ø Navigating File System commands
+	- $ cd  : Change directory (cd / )( cd .. -onestep back)(just cd takes to home directory
+	- $ pwd : Print working directory (pwd )
+	- $ ls : List (ls -ltr)
+	
+
+	Ø Linux File Types
+	Ø File symbol	Meaning
+	- 	Regular file
+	D	Directory
+	L	Link(soft link, hard link)
+	C	Special file or device file(hardware devices like keyboard, cpu, memory etc)
+	S	Socket (network communication between processes allowing data exchange between them )
+	P	Named pipe (FIFO used for inter process communication they allow data to be passed from one process to another in first in first out)
+	B	Block device(Hardware devices that handle data in blocks like hard drive or usb drives
+
+	Ø Linux File or Directory Properties
+	- Each file or directory in Linux has detail information or properties
+		○ $ ls -l
+		Type	 #Ofhardlinks	 owner	 Group	 Size	 Month	 Day	 Time	 Name
+		drwx--xr-x	21	Root	Root	4096	Feb	27	13:33	Var
+
+	Ø File system structure and its Description
+	- /boot	Contains file that is used by boot loader (grub.cfg)
+	/root	root user home directory
+	/dev 	System devices(eg disk, cdrom, speakers, flashdrive, keyboard, external peripherals) 
+	/etc	Configuration files(sendmail, nfs, ….. Application on top of Linux os or comes with linux )
+	/bin->/usr/bin	Everyday user command (ls, pwd,….)
+	/sbin->/usr/sbin	System/filesystem commands ( filessystem, disks, extending filesystem….)
+	/opt	Optional addon applications(Not part of OS apps) third party like oracle, sap etc
+		
+	/proc	Running processes(Only exist in Memory, ntg when turns off)
+	/lib->/usr/lib	C programming library files needed by commands and apps
+strace -e open pwd
+	/tmp	Directory for temporary files
+	/home	Directory for user
+	/var	System Logs
+	/run	Temporary runtime files system daemons PID files(when shutdown removes)
+	/mnt	To mount external filesystem(eg NFS)
+	/media 	For cdrom mounts
+	
+
+	Ø Creating Files and Directories
+	- Creating Files
+		○ touch filename (touch jerry)
+			§ Touch file1 file2 file3 
+		○ cp source destination(cp jerry lex)
+		○ vi editor and vim editor
+			§ Vi editor
+				□ :wq! - to exit
+		
+	- Creating Directories
+		○ mkdir
+			§ mkdir directoryname
+
+	Ø Copying Directories
+	- cp -r source destination
+
+	Ø Find files and directories 
+	- Two main commands are used to find files/directories
+		○ Find
+			§ $ find from_location_to_search -name filename/directory
+			§ $ find . -name "krammer" # .=pwd
+		○ Locate
+			§ $ locate krammer
+	- If locate command does not output any result, then as root run "updatedb"
+	- Also make sure you have "mlocate" package installed
+		○ To check = rpm -qa | grep mlocate
+		○ To install = yum install mlocate
+	- Locate is fast 
+	- find is hierarchical search
+	Ø Difference between find and locate
+	- Locate uses a prebuilt database, which should be regularly updated, while find iterates over a filesystem to locate files. Thus, locate is much faster than find, but can be inaccurate if the database (can be seen as a cache) is not updated. 
+
+	Ø Soft and Hard Links
+	- Inode = Pointer or number of a file on the hard disk
+		○ ls -ltri
+	- Soft Link = Link will be removed if file is removed or renamed.
+		○ ln -s
+		○ Different inodes
+	- Hard Link = Deleting renaming or moving the original file will not affect the hard link
+		○ ln 
+		○ Same inode?
+		○ Only works with same partition
+	Hard link -> inode
+	File -----------^
+	^
+	|
+soft link
+	- Cant create soft or hard link within the same directory with the same name
+
+	Ø Wildcards
+	- A wildcard is a character that can be used as a substitute for any of a class of characters in a search
+		• *-represents zero or more characters
+		• ?-represents a single character
+		• []-represents a range of characters 
+		• \ - as an escape character
+		• ^ - the beginning of the line
+		• $ - the end of line 
+			§ $ touch abcd{1..9}xyz
+			§ $ rm abc*
+			§ $ ls -l ?bc*
+			§ $ ls -l *[cd]* # either c or d
+			
+
+	Ø Files and Directory Permissions
+	- UNIX is a multiuser system. Every file and directory in account can be protected from or made accessible to other users by changing its access permissions. Every user has responsibility for controlling access to their files
+	- Permissions for a file or directory may be restricted to by types
+	- There are 3 types of permissions:
+		○ r-read-4
+		○ w-write-2
+		○ x-execute/running a program-1
+	- Each permission(rwx) can be controlled at 3 levels:
+		○ u-user who created
+		○ g-group
+		○ o-others
+	- File or directory permission can be displayed by running ls -l command
+		○ drwxrwxrwx 
+		○ d-filetype
+		○ First rwx - user
+		○ Second rwx - group
+		○ Third rwx - other
+	- Command to change permission
+		○ chmod 
+		○ chmod g-w filename
+		○ chmod 777 filename
+	
+
+	Ø File System Paths
+	- There are two paths to navigate to a file system
+		○ Absolute Path
+		○ Relative Path
+	- An absolute path always begin with a "/". This indicates that the path starts at the root directory
+	Eg: cd /var/log/samba
+	- A relative path does not begin with a "/". It identifies a location relative to current position.
+		○ cd /var
+		○ cd log
+		○ cd samba
+
+	Ø File Ownership 
+There are 2 owners of a file or directory 
+		○ User and group 
+	- Command to change file ownership 
+		○ Chown and cngrp 
+			§ Chown changes the ownership of a file 
+			§ Chgrp change the group ownership of a file
+		- -R Recursive ownership change option directory and all files in It
